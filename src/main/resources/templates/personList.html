@@ -8,21 +8,26 @@
 <body>
 <style>
     table {
-        border:1px solid black;
+        border: 1px solid black;
     }
 </style>
 <h1>Liste des Personnes</h1>
-<a href="addPerson">Add Person</a>
+<a href="addPerson">Ajouter une Personne</a>
 <br/><br/>
 <div>
     <table>
         <tr>
             <th>Prénom</th>
             <th>Nom</th>
+            <th>Actions</th>
         </tr>
-        <tr th:each ="person : ${persons}">
+        <tr th:each="person, iterStat : ${persons}">
             <td th:utext="${person.firstName}">...</td>
             <td th:utext="${person.lastName}">...</td>
+            <td>
+                <a th:href="@{/editPerson/{index}(index=${iterStat.index})}">Modifier</a> |
+                <a th:href="@{/deletePerson/{index}(index=${iterStat.index})}">Supprimer</a>
+            </td>
         </tr>
     </table>
 </div>

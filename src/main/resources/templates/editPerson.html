@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Modifier Personne</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>Modifier Personne:</h1>
+<form th:action="@{/editPerson/{index}(index=${index})}" th:object="${personForm}" method="POST">
+    Prénom:
+    <input type="text" th:field="*{firstName}"/>
+    <br/> Nom:
+    <input type="text" th:field="*{lastName}"/>
+    <br/>
+    <input type="submit" value="Update"/>
+</form>
+<br/>
+<!-- Display errorMessage if present -->
+<div th:if="${errorMessage}" th:utext="${errorMessage}" style="color:red;font-style:italic;">
+    ...
+</div>
+</body>
+</html>
