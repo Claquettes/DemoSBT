@@ -12,14 +12,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 
 @Controller
 public class MainController {
     private static List<Person> persons = new ArrayList<>();
 
     static {
-        persons.add(new Person("Bill", "Gates"));
-        persons.add(new Person("Steve", "Jobs"));
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            persons.add(new Person("Bill", "Gates", "bill.gates@example.com", sdf.parse("2004-02-15")));
+            persons.add(new Person("Steve", "Jobs", "steve.jobs@example.com", sdf.parse("2006-01-31")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Value("${welcome.message}")
@@ -51,11 +59,27 @@ public class MainController {
     public String savePerson(Model model, @ModelAttribute("personForm") PersonForm personForm) {
         String firstName = personForm.getFirstName();
         String lastName = personForm.getLastName();
-        if (firstName != null && firstName.length() > 0 && lastName != null && lastName.length() > 0) {
-            Person newPerson = new Person(firstName, lastName);
-            persons.add(newPerson);
-            return "redirect:/personList";
+        String email = personForm.getEmail();
+        String birthDate = personForm.getBirthDate();
+
+        if (firstName != null && firstName.length() > 0 &&
+                lastName != null && lastName.length() > 0 &&
+                email != null && email.length() > 0 &&
+                birthDate != null) {
+            try {
+                // Parse the date string into a Date object
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date dob = sdf.parse(birthDate);
+
+                Person newPerson = new Person(firstName, lastName, email, dob);
+                persons.add(newPerson);
+                return "redirect:/personList";
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", "Invalid date format. Please use yyyy-MM-dd.");
+                return "addPerson";
+            }
         }
+
         model.addAttribute("errorMessage", errorMessage);
         return "addPerson";
     }

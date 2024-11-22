@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>Liste des Personnes</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
@@ -17,13 +17,19 @@
 <div>
     <table>
         <tr>
+            <th>ID</th>
             <th>Prénom</th>
             <th>Nom</th>
+            <th>Email</th>
+            <th>Date de Naissance</th>
             <th>Actions</th>
         </tr>
         <tr th:each="person, iterStat : ${persons}">
+            <td th:utext="${person.personId}">...</td>
             <td th:utext="${person.firstName}">...</td>
             <td th:utext="${person.lastName}">...</td>
+            <td th:utext="${person.email}">...</td>
+            <td th:utext="${#dates.format(person.dob, 'dd/MM/yyyy')}">...</td>
             <td>
                 <a th:href="@{/editPerson/{index}(index=${iterStat.index})}">Modifier</a> |
                 <a th:href="@{/deletePerson/{index}(index=${iterStat.index})}">Supprimer</a>
